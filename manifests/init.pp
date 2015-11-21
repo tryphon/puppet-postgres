@@ -21,4 +21,6 @@ class postgres($version = '9.1') {
     notify => Service[postgresql],
     require => Package[postgresql]
   }
+
+  include postgres::munin
 }
