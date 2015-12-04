@@ -1,7 +1,8 @@
 class postgres($version = '9.1') {
 	package { "postgresql-${version}":
     alias => postgresql,
-    ensure => installed
+    ensure => installed,
+    require => Apt::Sources_list['postgresql']
   }
 
   service { "postgresql":
@@ -20,6 +21,15 @@ class postgres($version = '9.1') {
     group => postgres,
     notify => Service[postgresql],
     require => Package[postgresql]
+  }
+
+  apt::sources_list { 'postgresql':
+    content => 'deb http://apt.postgresql.org/pub/repos/apt/ wheezy-pgdg main',
+    require => Apt::Key_local['postgresql']
+  }
+  apt::key_local { 'postgresql':
+    key => 'ACCC4CF8',
+    source => 'puppet:///postgres/apt.key',
   }
 
   include postgres::munin
