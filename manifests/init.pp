@@ -1,4 +1,4 @@
-class postgres($version = '9.1') {
+class postgres($version = '9.1', $postgis = false) {
 	package { "postgresql-${version}":
     alias => postgresql,
     ensure => installed,
@@ -33,4 +33,16 @@ class postgres($version = '9.1') {
   }
 
   include postgres::munin
+
+  file { "/usr/local/share/postgresql":
+    ensure => directory
+  }
+
+  if $postgis {
+    package { "postgresql-${version}-postgis-2.2":
+      alias => postgresql-postgis,
+      ensure => installed,
+      require => Package["postgresql-${version}"]
+    }
+  }
 }
