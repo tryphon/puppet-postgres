@@ -12,8 +12,8 @@ class postgres($version = '9.1', $postgis = false) {
   }
 
   # Install postgresql when locale (UTF-8) is defined
-  if defined(Exec["/usr/sbin/locale-gen"]) {
-    Exec["/usr/sbin/locale-gen"] -> Package["postgresql-${version}"]
+  if defined(File["/etc/default/locale"]) {
+    File["/etc/default/locale"] -> Package["postgresql-${version}"]
   }
 
   file { "/etc/postgresql/${version}/main/pg_hba.conf":
