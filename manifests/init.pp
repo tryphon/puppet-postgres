@@ -19,7 +19,7 @@ class postgres($version = '9.1', $postgis = false) {
   }
 
   file { "/etc/postgresql/${version}/main/pg_hba.conf":
-    source => "puppet:///postgres/pg_hba.conf",
+    source => ["puppet:///files/postgres/pg_hba.conf.${fqdn}", "puppet:///modules/postgres/pg_hba.conf"],
     group => postgres,
     notify => Service[postgresql],
     require => Package[postgresql]
