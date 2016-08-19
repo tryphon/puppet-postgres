@@ -5,6 +5,8 @@ class postgres($version = '9.1', $postgis = false) {
     require => Apt::Sources_list['postgresql']
   }
 
+  $conf_path = "/etc/postgresql/${version}/main/postgresql.conf"
+
   service { "postgresql":
     ensure => running,
     hasstatus => true,
