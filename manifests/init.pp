@@ -41,9 +41,15 @@ class postgres($version = '9.1', $postgis = false) {
   }
 
   if $postgis {
-    package { "postgresql-${version}-postgis-2.2":
+    $postgis_version = $version ? {
+      '9.6' => '2.3',
+      default => '2.2'
+    }
+    package { "postgresql-${version}-postgis-${postgis_version}":
       alias => postgresql-postgis,
-      ensure => installed,
+      require => Package["postgresql-${version}", "postgresql-${version}-postgis-${postgis_version}-scripts"]
+    }
+    package { "postgresql-${version}-postgis-${postgis_version}-scripts":
       require => Package["postgresql-${version}"]
     }
   }
